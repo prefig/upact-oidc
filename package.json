@@ -1,0 +1,61 @@
+{
+	"name": "@prefig/upact-oidc",
+	"version": "0.1.0",
+	"description": "Generic OIDC adapter for upact — delegates substrate machinery to a substrate-side IDP (Authentik, Keycloak, ZITADEL, Dex). One adapter, many configured IDPs.",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"engines": {
+		"node": ">=18"
+	},
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"upact",
+		"identity-port",
+		"oidc",
+		"openid-connect",
+		"oauth2",
+		"anti-corruption-layer",
+		"privacy-by-design",
+		"minimum-disclosure",
+		"open-social-awards"
+	],
+	"author": "Theodore Evans",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/prefig/upact-oidc.git"
+	},
+	"scripts": {
+		"build": "tsc",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:integration": "DEX_AVAILABLE=1 vitest run --config vitest.integration.config.ts",
+		"typecheck": "tsc --noEmit",
+		"prepublishOnly": "npm run build && npm test"
+	},
+	"peerDependencies": {
+		"@prefig/upact": "^0.1.0",
+		"openid-client": "^6.8.0"
+	},
+	"devDependencies": {
+		"@prefig/upact": "^0.1.1",
+		"@types/node": "^22.0.0",
+		"openid-client": "^6.8.0",
+		"typescript": "^5.0.0",
+		"vitest": "^3.0.0"
+	}
+}
