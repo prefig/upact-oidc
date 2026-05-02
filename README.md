@@ -76,6 +76,12 @@ throw redirect(302, url.toString());
 createOidcAdapter({ ..., scopes: ['openid', 'offline_access', 'profile'] }, cookies);
 ```
 
+### Capability consequences
+
+The forbidden scopes mean this adapter cannot declare the matching upact capabilities. `capabilities.has('email')` always returns `false` here, even when the upstream IDP knows the user's email — the adapter has no way to learn it. Applications that need email-bound features (transactional email, recovery flows) require a different substrate.
+
+The `groups` scope is forbidden separately, to keep applications from deriving authorization roles from the substrate. Authorization is out of scope for the upact port (§3.1); use an application-layer authorization model rather than substrate group claims.
+
 ## Configuration
 
 | Field | Required | Description |
