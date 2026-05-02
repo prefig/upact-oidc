@@ -78,9 +78,9 @@ createOidcAdapter({ ..., scopes: ['openid', 'offline_access', 'profile'] }, cook
 
 ### Capability consequences
 
-Because the `email`, `phone`, and `address` scopes are forbidden, this adapter cannot declare the corresponding upact capabilities. `capabilities.has('email')` always returns `false` against this adapter, even when the upstream IDP knows the user's email — the adapter has no way to learn it. Applications that need email-bound features (transactional email, recovery flows) require a different substrate.
+The forbidden scopes mean this adapter cannot declare the matching upact capabilities. `capabilities.has('email')` always returns `false` here, even when the upstream IDP knows the user's email — the adapter has no way to learn it. Applications that need email-bound features (transactional email, recovery flows) require a different substrate.
 
-The `groups` scope is forbidden separately, to prevent applications from deriving authorization roles from the substrate. Per upact §3.1, authorization is out of scope for the port; use an application-layer authorization model instead of substrate group claims.
+The `groups` scope is forbidden separately, to keep applications from deriving authorization roles from the substrate. Authorization is out of scope for the upact port (§3.1); use an application-layer authorization model rather than substrate group claims.
 
 ## Configuration
 
