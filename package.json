@@ -1,7 +1,7 @@
 {
 	"name": "@prefig/upact-oidc",
 	"version": "0.1.0",
-	"description": "Generic OIDC adapter for upact — delegates substrate machinery to a substrate-side IDP (Authentik, Keycloak, ZITADEL, Dex). One adapter, many configured IDPs.",
+	"description": "OpenID Connect adapter for upact.",
 	"license": "Apache-2.0",
 	"type": "module",
 	"main": "./dist/index.js",
