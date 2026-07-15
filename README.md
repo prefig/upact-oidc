@@ -1,6 +1,6 @@
 # @prefig/upact-oidc
 
-A generic OIDC adapter for the [upact](https://github.com/prefig/upact) identity port. One adapter, any compliant IDP — Dex, Authentik, Keycloak, ZITADEL, Google, or any IDP that supports OpenID Connect Discovery.
+OpenID Connect adapter for the [upact](https://github.com/prefig/upact) identity port. Works with any IDP that supports OpenID Connect Discovery: Dex, Authentik, Keycloak, ZITADEL, Google.
 
 ## Install
 
@@ -43,10 +43,10 @@ const result = await adapter.authenticate({
   request: event.request,
 });
 if ('code' in result) {
-  // AuthError — redirect to error page
+  // AuthError: redirect to error page
   throw redirect(302, `/login?error=${result.code}`);
 }
-// result is a Session — store or use as needed
+// result is a Session; store or use as needed
 ```
 
 ### Reading the current identity
@@ -56,9 +56,9 @@ const upactor = await adapter.currentUpactor(event.request);
 if (!upactor) {
   throw redirect(302, '/login');
 }
-// upactor.id — deterministic, privacy-preserving identifier
-// upactor.lifecycle.expires_at — token expiry
-// upactor.provenance.instance — issuer URL
+// upactor.id: deterministic, privacy-preserving identifier
+// upactor.lifecycle.expires_at: token expiry
+// upactor.provenance.instance: issuer URL
 ```
 
 ### Logout
@@ -70,7 +70,7 @@ throw redirect(302, url.toString());
 
 ## Scope policy
 
-`email`, `phone`, `address`, and `groups` are forbidden — requesting them violates upact §7 privacy minima and throws immediately at adapter construction. Default scopes: `openid`, `offline_access`. Add `profile` to receive a `display_hint` (`preferred_username` or `name`, email-shaped values rejected).
+`email`, `phone`, `address`, and `groups` are forbidden: requesting them violates upact §7 privacy minima and throws immediately at adapter construction. Default scopes: `openid`, `offline_access`. Add `profile` to receive a `display_hint` (`preferred_username` or `name`, email-shaped values rejected).
 
 ```ts
 createOidcAdapter({ ..., scopes: ['openid', 'offline_access', 'profile'] }, cookies);
@@ -83,12 +83,12 @@ createOidcAdapter({ ..., scopes: ['openid', 'offline_access', 'profile'] }, cook
 | `issuer` | yes | OIDC issuer URL (discovery endpoint root) |
 | `clientId` | yes | OAuth2 client ID |
 | `clientSecret` | yes | OAuth2 client secret |
-| `redirectUri` | yes | Callback URI — must match IDP registration |
+| `redirectUri` | yes | Callback URI; must match IDP registration |
 | `cookieKey` | yes | 64-char hex (32 bytes) for HMAC-SHA256 cookie signing |
 | `scopes` | no | Default: `['openid', 'offline_access']` |
 | `sessionCookieName` | no | Default: `'__upact_oidc'` |
 | `stateCookieName` | no | Default: `'__upact_oidc_state'` |
-| `allowInsecureRequests` | no | Allow HTTP issuers — **local development only** |
+| `allowInsecureRequests` | no | Allow HTTP issuers (**local development only**) |
 
 Generate a cookie key:
 
@@ -98,18 +98,17 @@ node -e "console.log(Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toS
 
 ## Identifier derivation
 
-`Upactor.id` is the first 32 hex characters of `SHA-256("${sub}@${iss}")` — deterministic per identity, not reversible from the id alone, and stable across token refreshes.
+`Upactor.id` is the first 32 hex characters of `SHA-256("${sub}@${iss}")`: deterministic per identity, not reversible from the id alone, and stable across token refreshes.
 
 ## Conformance
 
 See [CONFORMANCE.md](./CONFORMANCE.md) for the full conformance statement against upact v0.1.1.
 
-## Local development rig
+## Integration testing
 
-A Dex IDP is provided at `../upact-oidc-poc/` for integration testing:
+The integration suite expects a local Dex IDP. The maintainers run it from the `upact-oidc-poc` compose rig; any OIDC-discovery-compliant IDP on the configured issuer works:
 
 ```sh
-docker compose -f ../upact-oidc-poc/docker-compose.yml up -d
 npm run test:integration
 ```
 
